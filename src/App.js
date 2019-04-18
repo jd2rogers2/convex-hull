@@ -13,8 +13,7 @@ class App extends Component {
   }
 
   plotRandom = () => {
-    // const numOfPts = Math.floor(Math.random() * 100) + 1;
-    const numOfPts = 10;
+    const numOfPts = Math.floor(Math.random() * 100) + 1;
     let newPoints = [];
     for (let x = 0; x < numOfPts; x++) {
       newPoints.push({
@@ -22,7 +21,7 @@ class App extends Component {
         y: Math.floor(Math.random() * 100) - 50
       });
     }
-console.log("plotRandom", newPoints);
+
     this.setState({points: newPoints, hullPoints: []});
   }
 
@@ -36,23 +35,15 @@ console.log("plotRandom", newPoints);
     const {points} = this.state;
     points.sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
 
-console.log("sorted", points);
     var n = points.length;
     var hull = [];
-    var firstLoop = true;
 
-    for (var i = 0; i < n; i++) {
-      while (hull.length >= 2 && this.removeMiddle(hull[hull.length - 2], hull[hull.length - 1], points[i])) {
+    for (var i = 0; i < 2 * n; i++) {
+      var j = i < n ? i : 2 * n - 1 - i;
+      while (hull.length >= 2 && this.removeMiddle(hull[hull.length - 2], hull[hull.length - 1], points[j])) {
         hull.pop();
       }
-      hull.push(points[i]);
-
-      // loop twice
-      if (firstLoop && i === n - 1) {
-        i = -1;
-        firstLoop = false;
-      }
-      // setTimeout(this.setState({hullPoints: hull}), 1000);
+      hull.push(points[j]);
     }
 
     // hull.pop();
